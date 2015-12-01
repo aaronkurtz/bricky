@@ -45,12 +45,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/bad')
-def bad():
-    1 / 0
-    return None
-
-
 @app.route('/upload', methods=['POST'])
 def upload():
     uploaded = request.files['file']
