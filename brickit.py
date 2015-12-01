@@ -30,6 +30,7 @@ def upload():
     uploaded = request.files['file']
     if not uploaded:
         return redirect('/')
+    app.logger.info('Uploaded file is %s', uploaded.filename)
     try:
         image = Image.open(uploaded)
     except IOError:
