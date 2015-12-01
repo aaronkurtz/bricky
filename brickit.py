@@ -22,7 +22,10 @@ def upload():
     uploaded = request.files['file']
     if not uploaded:
         return redirect('/')
-    image = Image.open(uploaded)
+    try:
+        image = Image.open(uploaded)
+    except IOError:
+        return redirect('/')
     new_size = legofy.get_new_size(image, BRICK_IMAGE)
     image.thumbnail(new_size, Image.ANTIALIAS)
     lego_image = legofy.make_lego_image(image, BRICK_IMAGE)
