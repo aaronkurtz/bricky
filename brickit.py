@@ -1,5 +1,6 @@
 from datetime import datetime
 import io
+import logging
 import os
 
 import legofy
@@ -10,6 +11,13 @@ BRICK_PATH = os.path.join(os.path.dirname(legofy.__file__), "assets", "bricks", 
 BRICK_IMAGE = Image.open(BRICK_PATH)
 
 app = Flask(__name__)
+
+
+@app.before_first_request
+def setup_logging():
+    if not app.debug:
+        app.logger.addHandler(logging.StreamHandler())
+        app.logger.setLevel(logging.INFO)
 
 
 @app.route('/')
