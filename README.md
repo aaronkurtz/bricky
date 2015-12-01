@@ -2,7 +2,7 @@
 
 Upload an image and transform it into a 1x1 brick version.
 
-http://bricky.herokuapp.com/
+https://bricky.herokuapp.com/
 
 Bricky uses [Legofy](https://github.com/JuanPotato/Legofy) for the image transformation.
 
