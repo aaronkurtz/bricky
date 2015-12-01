@@ -1,6 +1,8 @@
 Flask
 gunicorn
 
+keen
+
 pip-tools
 
 -e git+https://github.com/JuanPotato/Legofy#egg=Legofy

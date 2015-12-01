@@ -3,9 +3,10 @@ import io
 import logging
 import os
 
-import legofy
 from PIL import Image
 from flask import Flask, render_template, request, redirect, send_file
+import keen
+import legofy
 
 BRICK_PATH = os.path.join(os.path.dirname(legofy.__file__), "assets", "bricks", "1x1.png")
 BRICK_IMAGE = Image.open(BRICK_PATH)
@@ -30,7 +31,6 @@ def upload():
     uploaded = request.files['file']
     if not uploaded:
         return redirect('/')
-    app.logger.info('Uploaded file is %s', uploaded.filename)
     try:
         image = Image.open(uploaded)
     except IOError:
@@ -41,6 +41,16 @@ def upload():
     new_image = io.BytesIO()
     lego_image.save(new_image, format='PNG')
     new_image.seek(0)
+
+    browser_info = {'user_agent': request.headers.get('User-Agent', 'No Agent'),
+                    'X-Request-ID': request.headers.get('X-Request-ID', 'Missing X-Request-ID')}
+    file_info = {'filename': uploaded.filename, 'mimetype': uploaded.mimetype}
+
+    app.logger.info('Headers - {}'.format(browser_info))
+    app.logger.info('Upload - {}'.format(file_info))
+    if not app.debug:
+        keen.add_event('browser', browser_info)
+        keen.add_event('upload', file_info)
 
     response = send_file(new_image, mimetype='image/png')
     response.headers['Last-Modified'] = datetime.now()
