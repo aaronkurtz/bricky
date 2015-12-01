@@ -5,6 +5,7 @@ import os
 
 from PIL import Image
 from flask import Flask, render_template, request, redirect, send_file, got_request_exception
+from flask_sslify import SSLify
 import keen
 import legofy
 import rollbar
@@ -21,6 +22,8 @@ ROLLBAR_ACCESS_TOKEN = os.environ.get('ROLLBAR_ACCESS_TOKEN', None)
 BRICKY_ENV = os.environ.get('BRICKY_ENV', DEV)
 
 app = Flask(__name__)
+if BRICKY_ENV == LIVE:
+    sslify = SSLify(app, age=600)
 
 
 @app.before_first_request
