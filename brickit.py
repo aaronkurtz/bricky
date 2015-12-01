@@ -1,3 +1,4 @@
+from datetime import datetime
 import io
 import os
 
@@ -29,4 +30,9 @@ def upload():
     lego_image.save(new_image, format='PNG')
     new_image.seek(0)
 
-    return send_file(new_image, mimetype='image/png')
+    response = send_file(new_image, mimetype='image/png')
+    response.headers['Last-Modified'] = datetime.now()
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '-1'
+    return response
