@@ -2,6 +2,8 @@ Flask
 gunicorn
 
 keen
+rollbar
+blinker  #needed by rollbar according to docs
 
 pip-tools
 
