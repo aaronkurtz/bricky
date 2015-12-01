@@ -4,9 +4,11 @@ import logging
 import os
 
 from PIL import Image
-from flask import Flask, render_template, request, redirect, send_file
+from flask import Flask, render_template, request, redirect, send_file, got_request_exception
 import keen
 import legofy
+import rollbar
+import rollbar.contrib.flask
 
 DEV = 'development'
 LIVE = 'production'
@@ -14,6 +16,7 @@ LIVE = 'production'
 BRICK_PATH = os.path.join(os.path.dirname(legofy.__file__), "assets", "bricks", "1x1.png")
 BRICK_IMAGE = Image.open(BRICK_PATH)
 
+ROLLBAR_ACCESS_TOKEN = os.environ.get('ROLLBAR_ACCESS_TOKEN', None)
 
 BRICKY_ENV = os.environ.get('BRICKY_ENV', DEV)
 
@@ -25,6 +28,13 @@ def setup_logging():
     if not app.debug:
         app.logger.addHandler(logging.StreamHandler())
         app.logger.setLevel(logging.INFO)
+
+
+@app.before_first_request
+def setup_rollbar():
+    if ROLLBAR_ACCESS_TOKEN:
+        rollbar.init(ROLLBAR_ACCESS_TOKEN, BRICKY_ENV, root=os.path.dirname(os.path.realpath(__file__)), allow_logging_basic_config=False)
+        got_request_exception.connect(rollbar.contrib.flask.report_exception, app)
 
 
 @app.route('/')
