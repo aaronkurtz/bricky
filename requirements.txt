@@ -15,6 +15,7 @@ itsdangerous==0.24        # via flask
 jinja2==2.8               # via flask
 keen==0.3.20
 markupsafe==0.23          # via jinja2
+newrelic==2.58.2.45
 padding==0.4              # via keen
 pillow==3.0.0
 pip-tools==1.2.0

@@ -2,6 +2,7 @@ Flask
 Flask-SSLify
 gunicorn
 
+newrelic
 keen
 rollbar
 blinker  #needed by rollbar according to docs
