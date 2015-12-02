@@ -1,1 +1,1 @@
-web: gunicorn brickit:app --log-file=-
+web: newrelic-admin run-program gunicorn -b "0.0.0.0:$PORT" brickit:app --log-file=-
